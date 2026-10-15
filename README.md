@@ -3,12 +3,19 @@
 This repository holds the code, the experiment definitions and the logged results of the
 experiments in the Score Function Centering series of articles:
 
-1. [Score Function Centering Made Simple: Understanding Trainer-Generator Mismatch in Async RL from the Score Function](https://normaluhr.github.io/en/p/score-function-centering/)
-2. [Score Function Centering: Why a Stale Rollout Does Not Have to Be Importance Sampled](https://normaluhr.github.io/en/p/score-function-centering-kl/)
-3. [使用 Score Function Centering 和 Trainer-Generator KL 稳定你的异步 RL 训练](https://normaluhr.github.io/zh/p/score-function-centering-experiments/) (in Chinese)
+1. [Score Function Centering Made Simple: Understanding Trainer-Generator Mismatch in Async RL from the Score Function](https://normaluhr.github.io/en/p/score-function-centering/) ([中文](https://normaluhr.github.io/zh/p/score-function-centering/))
+2. [Score Function Centering: Why a Stale Rollout Does Not Have to Be Importance Sampled](https://normaluhr.github.io/en/p/score-function-centering-kl/) ([中文](https://normaluhr.github.io/zh/p/score-function-centering-kl/))
+3. [Stabilize Your Async RL Training with Score Function Centering and Trainer-Generator KL](https://normaluhr.github.io/en/p/score-function-centering-experiments/) ([中文](https://normaluhr.github.io/zh/p/score-function-centering-experiments/))
 
-Part 1 derives Score Function Centering (SFC), Part 2 adds the KL term that makes SFC+KL, and
-Part 3 reports the experiments whose runs are in `results/`. The repository is a fork of
+Part 1 shows that in async RL the score of a token is no longer zero-mean under the generator
+that sampled it, and derives Score Function Centering (SFC), which centers the score under that
+generator. Part 2 explains why importance sampling does not agree with SFC. A ratio correction
+moves the expectation back to the trainer's policy, which loses the zero-mean property that SFC
+restores, and truncating the ratio adds bias. Part 2 then derives a more natural way to control
+the trainer-generator mismatch. It keeps the learning signal of a stale rollout under the
+generator and limits the distance between the generator and the trainer with a KL term, whose
+gradient is exactly the direction that SFC removes from the reward gradient. This method is
+SFC+KL. Part 3 reports the experiments whose runs are in `results/`. The repository is a fork of
 [martin-marek/score-centering](https://github.com/martin-marek/score-centering), the code of
 *Score Centering Stabilizes Off-policy Reinforcement Learning*
 ([arXiv 2609.20807](https://arxiv.org/abs/2609.20807)), and keeps its MIT license.
@@ -26,8 +33,21 @@ the score under $q_\phi$ instead. For that, the generator sends back a payload o
 distribution at every position: the ids and log-probabilities of its top-k tokens, and
 optionally a few tokens sampled from the rest of the distribution (tail samples).
 
-SFC+KL keeps the learning signal under $q_\phi$ and controls the distance between $q_\phi$ and
-$p_\theta$ with a KL term instead of an importance ratio:
+Importance sampling would multiply the centered score by $p_\theta/q_\phi$ to correct the
+update back to $p_\theta$. In practice the ratio has to be truncated, which adds bias, and
+multiplying a score centered under $q_\phi$ by the ratio moves its expectation back to
+$p_\theta$, so the zero-mean property that SFC restores is lost again. SFC+KL keeps the learning
+signal under $q_\phi$ and controls the distance between $q_\phi$ and $p_\theta$ instead. Part 2
+derives a local bound between the update $g_q$ under the generator and the update $g_p$ under
+the current policy,
+
+$$
+\|g_q-g_p\|\le B\sqrt{2D_{\mathrm{KL}}(q_\phi\|p_\theta)},
+$$
+
+and the gradient of this KL is exactly the direction that SFC removes from the reward gradient.
+The update therefore separates what to learn from how far the trainer may move away from the
+sampler:
 
 $$
 g = \operatorname{Cov}_{q_\phi}(A, J_\theta) + \beta_t \left(\mathbb E_{q_\phi}[J_\theta] - \mathbb E_{p_\theta}[J_\theta]\right),
@@ -36,7 +56,8 @@ g = \operatorname{Cov}_{q_\phi}(A, J_\theta) + \beta_t \left(\mathbb E_{q_\phi}[
 $$
 
 where the age $e_t$ of a token is the number of optimizer steps between the weights that
-generated it and the trainer's weights. The reward gradient uses no importance ratio. The
+generated it and the trainer's weights. The coefficient decays with the age because an older
+sampler is a weaker reference. The reward gradient uses no importance ratio. The
 experiments use $\beta_0 = 0.3$, except the quantized-sampler study, which uses $\beta_0 = 0.03$.
 
 In the code, `loss_fn_rl` in `losses.py` computes the centered policy gradient with the full,
