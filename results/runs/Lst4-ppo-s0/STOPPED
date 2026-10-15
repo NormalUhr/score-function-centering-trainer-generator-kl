@@ -1,0 +1,1 @@
+stopped by the collapse rule (200-step mean training reward below the floor after step 400): steps=2640 last200=0.117 best200=0.753 floor=0.188; read at the stopped length.

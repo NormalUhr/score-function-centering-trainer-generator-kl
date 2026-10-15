@@ -1,0 +1,99 @@
+{
+ "async": {
+  "chunk_tokens": 128,
+  "coordinator": null,
+  "decode_rows": 0,
+  "exchange_dir": null,
+  "generator_index": 0,
+  "generators": 1,
+  "keep_versions": 3,
+  "poll_seconds": 0.5,
+  "publish_every": 1,
+  "queue_depth": 4,
+  "trainer_host_index": 0,
+  "trainer_hosts": 1,
+  "trainer_prompts": null,
+  "wait_timeout": 1800
+ },
+ "dtypes": {
+  "master": "float32",
+  "sampler": "float8_e4m3fn",
+  "trainer": "bfloat16"
+ },
+ "env": {
+  "args": null,
+  "chat_template_kwargs": {
+   "enable_thinking": false
+  },
+  "id": "intellect_math",
+  "prompt_format": "text"
+ },
+ "eval": {
+  "enabled": true,
+  "every_steps": 200,
+  "num_prompts": 128
+ },
+ "log": {
+  "dir": "outputs",
+  "every_steps": 1,
+  "project": "score-centering",
+  "run_name": "Qf8-sc-klr0.03-s0",
+  "save_model": false,
+  "wandb_mode": "disabled"
+ },
+ "model": {
+  "hidden_size": null,
+  "init": "pretrained",
+  "num_hidden_layers": null,
+  "source": "Qwen/Qwen3-30B-A3B-Base",
+  "weights_dir": "weights"
+ },
+ "opt": {
+  "b2": 0.99,
+  "lr": 0.01,
+  "lr_warmup": 0.0,
+  "optimizer": "sgd"
+ },
+ "rl": {
+  "group_size": 8,
+  "is": {
+   "high": Infinity,
+   "level": null,
+   "low": 0.0,
+   "outside": "drop",
+   "sign": "both",
+   "stat": "ratio"
+  },
+  "num_prompts": 16,
+  "sampler_kl": {
+   "clip": 5.0,
+   "coeff": 0.03
+  },
+  "sc": true,
+  "seq_len": 1024
+ },
+ "role": null,
+ "run": {
+  "seed": 0
+ },
+ "sampler": {
+  "kv_quant_bits": 0,
+  "shard": {
+   "dp": null,
+   "tp": 4
+  },
+  "staleness": 64,
+  "tail_samples": 0,
+  "vocab_logprobs": 128
+ },
+ "stop": {
+  "steps": 800
+ },
+ "train": {
+  "shard": {
+   "dp": null,
+   "fsdp": true,
+   "tp": 1
+  }
+ }
+}

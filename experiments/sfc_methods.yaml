@@ -1,0 +1,111 @@
+# SFC, SFC+TIS, SFC+MIS and SFC+KL in the seven asynchronous settings of Part 3 (sections 2 to 4
+# and 6): Qwen3-0.6B on Countdown with 4-prompt and 2-prompt trainer slices (SGD), on Countdown
+# with AdamW and on GSM8K (4-prompt slices), and Qwen3-4B, Qwen3-30B-A3B and GLM-4.5-Air on
+# Countdown with 1-prompt slices. Every run trains 3,200 steps with a context length of 4,096
+# tokens. The group of an arm is its setting.
+wave: sfc_methods
+arms:
+  - name: Lst4-sc-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=800 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lst4-tis-sc-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=800 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lst4-mis-sc-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 rl.is.level=token rl.is.low=0.5 rl.is.high=5.0 rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lst4-sc-klr0.3-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lst2-sc-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=2 eval.every_steps=1600 stop.steps=3200
+  - name: Lst2-tis-sc-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=2 eval.every_steps=1600 stop.steps=3200
+  - name: Lst2-mis-sc-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=2 eval.every_steps=400 rl.is.level=token rl.is.low=0.5 rl.is.high=5.0 rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lst2-sc-klr0.3-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=2 eval.every_steps=400 stop.steps=3200
+  - name: Lat4-sc-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=4 eval.every_steps=800 stop.steps=3200
+  - name: Lat4-tis-sc-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=4 eval.every_steps=800 stop.steps=3200
+  - name: Lat4-mis-sc-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 rl.is.level=token rl.is.low=0.5 rl.is.high=5.0 rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lat4-sc-klr0.3-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=4 eval.every_steps=800 rl.sampler_kl.coeff=0.3 stop.steps=3200
+  - name: Lag4-sc-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=4 eval.every_steps=800 stop.steps=3200
+  - name: Lag4-tis-sc-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=4 eval.every_steps=800 stop.steps=3200
+  - name: Lag4-mis-sc-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 rl.is.level=token rl.is.low=0.5 rl.is.high=5.0 rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lag4-sc-klr0.3-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=4 eval.every_steps=800 rl.sampler_kl.coeff=0.3 stop.steps=3200
+  - name: M4st1-sc-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: rl.num_prompts=64 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.trainer_prompts=1 eval.every_steps=3200 stop.steps=3200 model.source=Qwen/Qwen3-4B async.decode_rows=32
+  - name: M4st1-tis-sc-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: rl.num_prompts=64 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.trainer_prompts=1 eval.every_steps=3200 stop.steps=3200 model.source=Qwen/Qwen3-4B async.decode_rows=32
+  - name: M4st1-mis-sc-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-4B rl.num_prompts=64 async.trainer_prompts=1 eval.every_steps=400 rl.is.level=token rl.is.low=0.5 rl.is.high=5.0 rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=32 stop.steps=3200
+  - name: M4st1-sc-klr0.3-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: rl.num_prompts=64 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.trainer_prompts=1 eval.every_steps=3200 stop.steps=3200 model.source=Qwen/Qwen3-4B async.decode_rows=32
+  - name: Lp30ba1-tis-sc-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 async.queue_depth=4 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true sampler.vocab_logprobs=128 rl.seq_len=4096 async.chunk_tokens=128 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 stop.steps=3200 eval.every_steps=3200
+  - name: Lp30ba1-mis-sc-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 async.queue_depth=4 rl.is.level=token rl.is.low=0.5 rl.is.high=5.0 rl.sc=true sampler.vocab_logprobs=128 rl.seq_len=4096 async.chunk_tokens=128 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 eval.every_steps=400 stop.steps=3200
+  - name: Lp30ba1-sc-klr0.3-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 async.queue_depth=4 rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 rl.seq_len=4096 async.chunk_tokens=128 rl.sampler_kl.coeff=0.3 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 stop.steps=3200 eval.every_steps=3200
+  - name: Lglma1-tis-sc-s{seed}
+    group: Lglma1
+    seeds: [0]
+    overrides: model.source=zai-org/GLM-4.5-Air sampler.shard.tp=8 train.shard.tp=2 async.generators=2 async.publish_every=64 async.queue_depth=4 rl.num_prompts=64 async.trainer_prompts=1 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=128 sampler.vocab_logprobs=128 async.wait_timeout=7200 eval.every_steps=400 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true stop.steps=3200
+  - name: Lglma1-mis-sc-s{seed}
+    group: Lglma1
+    seeds: [0]
+    overrides: model.source=zai-org/GLM-4.5-Air sampler.shard.tp=8 train.shard.tp=2 async.generators=2 async.publish_every=64 async.queue_depth=4 rl.num_prompts=64 async.trainer_prompts=1 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=128 sampler.vocab_logprobs=128 async.wait_timeout=7200 eval.every_steps=400 rl.is.level=token rl.is.low=0.5 rl.is.high=5.0 rl.sc=true stop.steps=3200
+  - name: Lglma1-sc-klr0.3-s{seed}
+    group: Lglma1
+    seeds: [1]
+    overrides: model.source=zai-org/GLM-4.5-Air sampler.shard.tp=8 train.shard.tp=2 async.generators=2 async.publish_every=64 async.queue_depth=4 rl.num_prompts=64 async.trainer_prompts=1 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=128 sampler.vocab_logprobs=128 async.wait_timeout=7200 eval.every_steps=400 rl.is.level=null rl.sc=true rl.sampler_kl.coeff=0.3 stop.steps=3200

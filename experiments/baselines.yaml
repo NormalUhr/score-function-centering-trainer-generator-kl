@@ -1,0 +1,121 @@
+# PPO, DAPO, GSPO, DPPO and TOPR without score centering in six of the asynchronous settings
+# (Part 3, section 8.1; PPO in five of them), spelled on the importance-sampling grid of
+# losses.py (the table in README.md).
+wave: baselines
+arms:
+  - name: Lst4-ppo-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=800 rl.is.level=token rl.is.low=0.8 rl.is.high=1.2 rl.is.sign=ppo rl.sc=false sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lst4-dapo-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=token rl.is.low=0.8 rl.is.high=1.28 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lst4-gspo-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lst4-dppo-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=token rl.is.stat=tv rl.is.high=0.2 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lst4-topr-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lst2-ppo-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 rl.is.level=token rl.is.low=0.8 rl.is.high=1.2 rl.is.sign=ppo rl.sc=false sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=2 eval.every_steps=1600 stop.steps=3200
+  - name: Lst2-dapo-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=2 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=token rl.is.low=0.8 rl.is.high=1.28 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lst2-gspo-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=2 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lst2-dppo-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=2 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=token rl.is.stat=tv rl.is.high=0.2 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lst2-topr-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=2 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lat4-ppo-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 rl.is.level=token rl.is.low=0.8 rl.is.high=1.2 rl.is.sign=ppo rl.sc=false sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=4 eval.every_steps=800 stop.steps=3200
+  - name: Lat4-dapo-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=token rl.is.low=0.8 rl.is.high=1.28 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lat4-gspo-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lat4-dppo-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=token rl.is.stat=tv rl.is.high=0.2 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lat4-topr-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lag4-ppo-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 rl.is.level=token rl.is.low=0.8 rl.is.high=1.2 rl.is.sign=ppo rl.sc=false sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 async.trainer_prompts=4 eval.every_steps=800 stop.steps=3200
+  - name: Lag4-dapo-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=token rl.is.low=0.8 rl.is.high=1.28 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lag4-gspo-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lag4-dppo-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=token rl.is.stat=tv rl.is.high=0.2 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lag4-topr-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 async.trainer_prompts=4 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: M4st1-ppo-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: rl.num_prompts=64 rl.is.level=token rl.is.low=0.8 rl.is.high=1.2 rl.is.sign=ppo rl.sc=false sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.trainer_prompts=1 eval.every_steps=3200 stop.steps=3200 model.source=Qwen/Qwen3-4B async.decode_rows=32
+  - name: M4st1-dapo-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-4B rl.num_prompts=64 async.trainer_prompts=1 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=32 rl.is.level=token rl.is.low=0.8 rl.is.high=1.28 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: M4st1-gspo-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-4B rl.num_prompts=64 async.trainer_prompts=1 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=32 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: M4st1-dppo-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-4B rl.num_prompts=64 async.trainer_prompts=1 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=32 rl.is.level=token rl.is.stat=tv rl.is.high=0.2 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: M4st1-topr-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-4B rl.num_prompts=64 async.trainer_prompts=1 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=32 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lp30ba1-dapo-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 async.queue_depth=4 sampler.vocab_logprobs=128 rl.seq_len=4096 async.chunk_tokens=128 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 rl.is.level=token rl.is.low=0.8 rl.is.high=1.28 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lp30ba1-gspo-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 async.queue_depth=4 sampler.vocab_logprobs=128 rl.seq_len=4096 async.chunk_tokens=128 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lp30ba1-dppo-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 async.queue_depth=4 sampler.vocab_logprobs=128 rl.seq_len=4096 async.chunk_tokens=128 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 rl.is.level=token rl.is.stat=tv rl.is.high=0.2 rl.is.sign=ppo rl.sc=false eval.every_steps=400 stop.steps=3200
+  - name: Lp30ba1-topr-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 async.queue_depth=4 sampler.vocab_logprobs=128 rl.seq_len=4096 async.chunk_tokens=128 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=false eval.every_steps=400 stop.steps=3200

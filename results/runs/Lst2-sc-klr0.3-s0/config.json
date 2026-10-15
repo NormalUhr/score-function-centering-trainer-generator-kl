@@ -1,0 +1,99 @@
+{
+ "async": {
+  "chunk_tokens": 128,
+  "coordinator": null,
+  "decode_rows": 64,
+  "exchange_dir": "exchange/Lst2-sc-klr0.3-s0",
+  "generator_index": 0,
+  "generators": 6,
+  "keep_versions": 3,
+  "poll_seconds": 0.5,
+  "publish_every": 1,
+  "queue_depth": 4,
+  "trainer_host_index": 0,
+  "trainer_hosts": 1,
+  "trainer_prompts": 2,
+  "wait_timeout": 1800
+ },
+ "dtypes": {
+  "master": "float32",
+  "sampler": "bfloat16",
+  "trainer": "bfloat16"
+ },
+ "env": {
+  "args": null,
+  "chat_template_kwargs": {
+   "enable_thinking": false
+  },
+  "id": "countdown",
+  "prompt_format": "chat"
+ },
+ "eval": {
+  "enabled": true,
+  "every_steps": 400,
+  "num_prompts": 64
+ },
+ "log": {
+  "dir": "outputs",
+  "every_steps": 1,
+  "project": "score-centering",
+  "run_name": "Lst2-sc-klr0.3-s0",
+  "save_model": false,
+  "wandb_mode": "disabled"
+ },
+ "model": {
+  "hidden_size": null,
+  "init": "pretrained",
+  "num_hidden_layers": null,
+  "source": "Qwen/Qwen3-0.6B",
+  "weights_dir": "weights"
+ },
+ "opt": {
+  "b2": 0.99,
+  "lr": 0.01,
+  "lr_warmup": 0.0,
+  "optimizer": "sgd"
+ },
+ "rl": {
+  "group_size": 8,
+  "is": {
+   "high": Infinity,
+   "level": null,
+   "low": 0.0,
+   "outside": "drop",
+   "sign": "both",
+   "stat": "ratio"
+  },
+  "num_prompts": 64,
+  "sampler_kl": {
+   "clip": 5.0,
+   "coeff": 0.3
+  },
+  "sc": true,
+  "seq_len": 4096
+ },
+ "role": "trainer",
+ "run": {
+  "seed": 0
+ },
+ "sampler": {
+  "kv_quant_bits": 0,
+  "shard": {
+   "dp": null,
+   "tp": null
+  },
+  "staleness": 0,
+  "tail_samples": 0,
+  "vocab_logprobs": 128
+ },
+ "stop": {
+  "steps": 3200
+ },
+ "train": {
+  "shard": {
+   "dp": null,
+   "fsdp": true,
+   "tp": 1
+  }
+ }
+}

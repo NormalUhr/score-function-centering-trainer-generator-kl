@@ -1,0 +1,41 @@
+# Payload timing probes at Countdown 4-prompt slices (Part 3, section 5): 100 trainer steps per
+# payload, no evaluation and the same seed, to measure the cost per step of the trainer and of
+# the generators for each payload.
+wave: payload_timing
+arms:
+  - name: Tpay-sc-klr0.3-k128-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=128 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100
+  - name: Tpay-sc-klr0.3-k64-t64-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=64 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100 sampler.tail_samples=64
+  - name: Tpay-sc-klr0.3-k32-t96-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=32 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100 sampler.tail_samples=96
+  - name: Tpay-sc-klr0.3-k32-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=32 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100
+  - name: Tpay-sc-klr0.3-k16-t16-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=16 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100 sampler.tail_samples=16
+  - name: Tpay-sc-klr0.3-k8-t24-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=8 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100 sampler.tail_samples=24
+  - name: Tpay-sc-klr0.3-k16-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=16 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100
+  - name: Tpay-sc-klr0.3-k8-t8-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=8 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100 sampler.tail_samples=8
+  - name: Tpay-sc-klr0.3-k4-t12-s{seed}
+    group: Tpay
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.enabled=false rl.is.level=null rl.sc=true sampler.vocab_logprobs=4 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=100 sampler.tail_samples=12

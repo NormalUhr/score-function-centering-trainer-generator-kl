@@ -1,0 +1,38 @@
+# SFC+KL at Countdown 4-prompt slices with other payloads (Part 3, section 5): an exact top-k
+# head alone, or a head plus tail samples drawn from the sampler outside the head, at widths of
+# 128, 32 and 16 tokens per position. The default payload, top-128 without tail samples, is the
+# SFC+KL arm of sfc_methods.yaml.
+wave: payload
+arms:
+  - name: Lst4-sc-klr0.3-k64-t64-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 rl.is.level=null rl.sc=true sampler.vocab_logprobs=64 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200 sampler.tail_samples=64
+  - name: Lst4-sc-klr0.3-k32-t96-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 rl.is.level=null rl.sc=true sampler.vocab_logprobs=32 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200 sampler.tail_samples=96
+  - name: Lst4-sc-klr0.3-k32-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 eval.save_samples=8 rl.is.level=null rl.sc=true sampler.vocab_logprobs=32 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lst4-sc-klr0.3-k16-t16-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 eval.save_samples=8 rl.is.level=null rl.sc=true sampler.vocab_logprobs=16 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200 sampler.tail_samples=16
+  - name: Lst4-sc-klr0.3-k8-t24-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 eval.save_samples=8 rl.is.level=null rl.sc=true sampler.vocab_logprobs=8 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200 sampler.tail_samples=24
+  - name: Lst4-sc-klr0.3-k16-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 eval.save_samples=8 rl.is.level=null rl.sc=true sampler.vocab_logprobs=16 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200
+  - name: Lst4-sc-klr0.3-k8-t8-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 eval.save_samples=8 rl.is.level=null rl.sc=true sampler.vocab_logprobs=8 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200 sampler.tail_samples=8
+  - name: Lst4-sc-klr0.3-k4-t12-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 eval.save_samples=8 rl.is.level=null rl.sc=true sampler.vocab_logprobs=4 rl.sampler_kl.coeff=0.3 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 async.decode_rows=64 stop.steps=3200 sampler.tail_samples=12

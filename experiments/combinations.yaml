@@ -1,0 +1,53 @@
+# SFC+KL on top of TOPR and GSPO in six of the asynchronous settings (Part 3, section 8.2): the
+# method's own importance-sampling correction plus score centering and the KL term with
+# beta_0 = 0.3.
+wave: combinations
+arms:
+  - name: Lst4-topr-sc-klr0.3-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 async.decode_rows=64 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lst4-gspo-sc-klr0.3-s{seed}
+    group: Lst4
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 async.decode_rows=64 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lst2-topr-sc-klr0.3-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=2 async.decode_rows=64 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lst2-gspo-sc-klr0.3-s{seed}
+    group: Lst2
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=2 async.decode_rows=64 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lat4-topr-sc-klr0.3-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 async.trainer_prompts=4 async.decode_rows=64 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lat4-gspo-sc-klr0.3-s{seed}
+    group: Lat4
+    seeds: [0]
+    overrides: opt.optimizer=adamw opt.lr=1e-6 rl.num_prompts=64 async.trainer_prompts=4 async.decode_rows=64 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lag4-topr-sc-klr0.3-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 async.trainer_prompts=4 async.decode_rows=64 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lag4-gspo-sc-klr0.3-s{seed}
+    group: Lag4
+    seeds: [0]
+    overrides: env.id=gsm8k rl.num_prompts=64 async.trainer_prompts=4 async.decode_rows=64 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: M4st1-topr-sc-klr0.3-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-4B rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=32 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: M4st1-gspo-sc-klr0.3-s{seed}
+    group: M4st1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-4B rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=32 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lp30ba1-topr-sc-klr0.3-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_sum rl.is.low=0 rl.is.high=1.0 rl.is.outside=clamp rl.is.sign=neg rl.sc=true rl.sampler_kl.coeff=0.3
+  - name: Lp30ba1-gspo-sc-klr0.3-s{seed}
+    group: Lp30ba1
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B sampler.shard.tp=4 async.generators=2 async.publish_every=8 rl.num_prompts=64 async.trainer_prompts=1 async.decode_rows=128 sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=4096 async.chunk_tokens=128 eval.every_steps=400 stop.steps=3200 rl.is.level=seq_mean rl.is.low=0.9997 rl.is.high=1.0004 rl.is.sign=ppo rl.sc=true rl.sampler_kl.coeff=0.3

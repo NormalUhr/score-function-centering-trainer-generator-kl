@@ -1,0 +1,12 @@
+# SFC+TIS at Countdown 4-prompt slices with context lengths of 8,192 and 16,384 tokens (Part 3,
+# section 3.1). The run at 4,096 tokens is the SFC+TIS arm of sfc_methods.yaml.
+wave: context_length
+arms:
+  - name: Lst4b8k-tis-sc-s{seed}
+    group: Lst4b8k
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=8192 async.chunk_tokens=128 async.decode_rows=64 async.wait_timeout=21600 stop.steps=3200
+  - name: Lst4b16k-tis-sc-s{seed}
+    group: Lst4b16k
+    seeds: [0]
+    overrides: rl.num_prompts=64 async.trainer_prompts=4 eval.every_steps=400 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true sampler.vocab_logprobs=128 async.queue_depth=4 rl.seq_len=16384 async.chunk_tokens=128 async.decode_rows=32 async.wait_timeout=21600 stop.steps=3200

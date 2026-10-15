@@ -1,0 +1,33 @@
+# SFC+TIS and SFC+KL with a quantized sampler (Part 3, section 7): Qwen3-30B-A3B-Base on the
+# INTELLECT-2 math problems with a bf16 trainer and three sampler levels (FP8 matmuls; FP8
+# matmuls with an FP4 KV cache; INT8 matmuls with an INT4 KV cache). These runs use the
+# synchronous trainer (train_rl.py, launched with wave_driver.py), whose sampler is refreshed
+# every 65 steps and is therefore up to 64 steps old (sampler.staleness=64), with a context
+# length of 1,024 tokens, 16 prompts of 8 responses per step, 800 steps, and beta_0 = 0.03 for
+# the KL term.
+wave: quantized_sampler
+arms:
+  - name: Qf8-tis-sc-s{seed}
+    group: Qf8
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B-Base env.prompt_format=text env.id=intellect_math sampler.shard.tp=4 rl.num_prompts=16 rl.seq_len=1024 sampler.staleness=64 stop.steps=800 eval.every_steps=200 eval.num_prompts=128 sampler.vocab_logprobs=128 dtypes.sampler=float8_e4m3fn rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true
+  - name: Qf8-sc-klr0.03-s{seed}
+    group: Qf8
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B-Base env.prompt_format=text env.id=intellect_math sampler.shard.tp=4 rl.num_prompts=16 rl.seq_len=1024 stop.steps=800 eval.every_steps=200 eval.num_prompts=128 sampler.vocab_logprobs=128 sampler.staleness=64 dtypes.sampler=float8_e4m3fn rl.is.level=null rl.sc=true rl.sampler_kl.coeff=0.03
+  - name: Qf8k4-tis-sc-s{seed}
+    group: Qf8k4
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B-Base env.prompt_format=text env.id=intellect_math sampler.shard.tp=4 rl.num_prompts=16 rl.seq_len=1024 sampler.staleness=64 stop.steps=800 eval.every_steps=200 eval.num_prompts=128 sampler.vocab_logprobs=128 dtypes.sampler=float8_e4m3fn sampler.kv_quant_bits=fp4 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true
+  - name: Qf8k4-sc-klr0.03-s{seed}
+    group: Qf8k4
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B-Base env.prompt_format=text env.id=intellect_math sampler.shard.tp=4 rl.num_prompts=16 rl.seq_len=1024 stop.steps=800 eval.every_steps=200 eval.num_prompts=128 sampler.vocab_logprobs=128 sampler.staleness=64 dtypes.sampler=float8_e4m3fn sampler.kv_quant_bits=fp4 rl.is.level=null rl.sc=true rl.sampler_kl.coeff=0.03
+  - name: Qi8k4-tis-sc-s{seed}
+    group: Qi8k4
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B-Base env.prompt_format=text env.id=intellect_math sampler.shard.tp=4 rl.num_prompts=16 rl.seq_len=1024 sampler.staleness=64 stop.steps=800 eval.every_steps=200 eval.num_prompts=128 sampler.vocab_logprobs=128 dtypes.sampler=int8 sampler.kv_quant_bits=4 rl.is.level=token rl.is.high=2.0 rl.is.outside=clamp rl.sc=true
+  - name: Qi8k4-sc-klr0.03-s{seed}
+    group: Qi8k4
+    seeds: [0]
+    overrides: model.source=Qwen/Qwen3-30B-A3B-Base env.prompt_format=text env.id=intellect_math sampler.shard.tp=4 rl.num_prompts=16 rl.seq_len=1024 stop.steps=800 eval.every_steps=200 eval.num_prompts=128 sampler.vocab_logprobs=128 sampler.staleness=64 dtypes.sampler=int8 sampler.kv_quant_bits=4 rl.is.level=null rl.sc=true rl.sampler_kl.coeff=0.03
