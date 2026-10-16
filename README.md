@@ -1,4 +1,4 @@
-# SFC+KL
+# Score Function Centering with Trainer-Generator Mismatch for Async LLM RL 
 
 This repository holds the code, the experiment definitions and the logged results of the
 experiments in the Score Function Centering series of articles:
